@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from . import config
+from . import configuration
 
 app = FastAPI()
 
@@ -11,11 +11,16 @@ app.mount("/static", StaticFiles(directory="src/static"), name="static")
 
 templates = Jinja2Templates(directory="src/templates")
 
+app_config = {
+    "name": "LoL genie",
+    "api_key": configuration.get_api_key()
+}
+
 
 @app.get("/")
 def index(request: Request):
-    api_key = config.get_api_key()
-    context = {"request": request, "api_key": api_key}
+    
+    context = {"request": request, 'app_config': app_config}
     return templates.TemplateResponse("index.html", context)
 
 
