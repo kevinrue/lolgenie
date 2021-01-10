@@ -6,7 +6,7 @@
 
 In order to run this app in development mode:
   1. Clone repository
-  2. Create a python environment using the `requirment.txt` file
+  2. Create a python environment using the `requirements.txt` file
   3. Run the webserver using `uvicorn`: `uvicorn src.main:app --reload`
 
 # Riot requirements
