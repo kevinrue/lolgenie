@@ -7,8 +7,8 @@
 In order to run this app in development mode:
   1. Clone repository
   2. Create a Conda environment using Conda: `conda create -n riot_client python=3.8`
-  2. Restore the python environment using the `requirements.txt` file: `pip install -r requirements.txt`
-  3. Run the webserver using `uvicorn`: `uvicorn src.main:app --reload`
+  3. Restore the python environment using the `requirements.txt` file: `pip install -r requirements.txt`
+  4. Run the webserver using `uvicorn`: `uvicorn src.main:app --reload`
 
 # Riot requirements
 
