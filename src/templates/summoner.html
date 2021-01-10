@@ -2,6 +2,7 @@
 
 
 {% block content %}
-  <h1><span class="text-primary">{{summoner}}</span>'s page</h1>
+  <h1><span class="text-primary">{{query.name}}</span></h1>
+  <h2>Summoner level {{query.summonerLevel}}</h2>
   <a href="/">Go back to index</a>
 {% endblock %}
