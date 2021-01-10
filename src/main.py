@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from . import riot
+from . import config
 
 app = FastAPI()
 
@@ -14,7 +14,7 @@ templates = Jinja2Templates(directory="src/templates")
 
 @app.get("/")
 def index(request: Request):
-    api_key = riot.get_api_key()
+    api_key = config.get_api_key()
     context = {"request": request, "api_key": api_key}
     return templates.TemplateResponse("index.html", context)
 
