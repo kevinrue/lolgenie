@@ -12,10 +12,12 @@ In order to run this app in development mode, set up your workspace as follows:
   3. Restore the python environment using the `requirements.txt` file: `pip install -r requirements.txt`
   4. Run the webserver using `uvicorn`: `uvicorn src.main:app --reload`
 
-Every time you come back to the project, prepare your workspace as follows:
+Every time you come back to the project, run the app as follows:
 
-1. Activate the Conda environment: `conda activate lolgenie`
-2. Run the webserver using `uvicorn`: `uvicorn src.main:app --reload`
+```
+conda activate lolgenie
+uvicorn src.main:app --reload
+```
 
 # Riot requirements
 
