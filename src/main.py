@@ -21,12 +21,13 @@ app.mount("/static", StaticFiles(directory="src/static"), name="static")
 
 templates = Jinja2Templates(directory="src/templates")
 
-common_context = {"settings": settings}
+
+def get_context():
+    return copy.deepcopy(common_context)
 
 
 @app.get("/")
-def home(request: Request):
-    context = common_context
+def home(request: Request, context: dict = get_context()):
     context.update(
         {
             "request": request,
@@ -36,8 +37,7 @@ def home(request: Request):
 
 
 @app.get("/summoner/{summoner}")
-def summoner_get(request: Request, summoner: str):
-    context = common_context
+def summoner_get(request: Request, summoner: str, context: dict = get_context()):
     query = riot.get_summoner_data("euw1", summoner, settings.api_key)
     print(query)
     context.update(
@@ -50,7 +50,9 @@ def summoner_get(request: Request, summoner: str):
 
 
 @app.post("/summoner")
-def summoner_form(request: Request, summoner: str = Form(...)):
+def summoner_form(
+    request: Request, context: dict = get_context(), summoner: str = Form(...)
+):
     return RedirectResponse(
         url=f"/summoner/{summoner}", status_code=status.HTTP_303_SEE_OTHER
     )
