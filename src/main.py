@@ -25,14 +25,14 @@ common_context = {"settings": settings}
 
 
 @app.get("/")
-def index(request: Request):
+def home(request: Request):
     context = common_context
     context.update(
         {
             "request": request,
         }
     )
-    return templates.TemplateResponse("index.html", context)
+    return templates.TemplateResponse("home.html", context)
 
 
 @app.get("/summoner/{summoner}")
@@ -43,7 +43,7 @@ def summoner_get(request: Request, summoner: str):
     context.update(
         {
             "request": request,
-            "query": query
+            "query": query,
         }
     )
     return templates.TemplateResponse("summoner.html", context)
