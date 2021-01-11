@@ -1,3 +1,5 @@
+import copy
+
 from fastapi import FastAPI, Request, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -20,6 +22,11 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="src/static"), name="static")
 
 templates = Jinja2Templates(directory="src/templates")
+
+common_context = {
+    "settings": settings,
+    "messages": [],
+}
 
 
 def get_context():
