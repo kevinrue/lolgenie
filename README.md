@@ -4,11 +4,20 @@
 
 # FastAPI requirements
 
-In order to run this app in development mode:
+In order to run this app in development mode, set up your workspace as follows:
+
   1. Clone repository
   2. Create a Conda environment using Conda: `conda create -n lolgenie python=3.8`
+  3. Activate the Conda environment: `conda activate lolgenie`
   3. Restore the python environment using the `requirements.txt` file: `pip install -r requirements.txt`
   4. Run the webserver using `uvicorn`: `uvicorn src.main:app --reload`
+
+Every time you come back to the project, run the app as follows:
+
+```
+conda activate lolgenie
+uvicorn src.main:app --reload
+```
 
 # Riot requirements
 
