@@ -12,8 +12,8 @@
     </tr>
     {% for game in last_games['matches'] %}
     <tr>
-      <td>ID: {{ game['gameId'] }}</td>
-      <td> Champion: {{ game['champion'] }}</td>
+      <td>{{ game['gameId'] }}</td>
+      <td>{{ game['champion'] }}</td>
     </tr>
   {% endfor %}
   </table>
