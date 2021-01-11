@@ -38,12 +38,16 @@ def home(request: Request):
 @app.get("/summoner/{summoner}")
 def summoner_get(request: Request, summoner: str):
     context = common_context
-    query = riot.get_summoner_data("euw1", summoner, settings.api_key)
-    print(query)
+    # TODO: parameterize hard-coded region
+    summoner_data = riot.get_summoner_data("euw1", summoner, settings.api_key)
+    print(summoner_data)
+    last_games = riot.get_last_games("euw1", summoner_data['accountId'], settings.api_key, start_index = 0, end_index = 20)
+    print(last_games)
     context.update(
         {
             "request": request,
-            "query": query,
+            "summoner_data": summoner_data,
+            "last_games": last_games,
         }
     )
     return templates.TemplateResponse("summoner.html", context)
