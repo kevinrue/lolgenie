@@ -45,7 +45,11 @@ def home(request: Request, context: dict = get_context()):
 
 @app.get("/summoner/{summoner}")
 def summoner_get(request: Request, summoner: str, context: dict = get_context()):
-    query = riot.get_summoner_data("euw1", summoner, settings.api_key)
+    success, query = riot.get_summoner_data("euw1", summoner, settings.api_key)
+    if not success:
+        context["messages"].append(
+            ("error", f"Failed to retrieve summoner data: {query}")
+        )
     print(query)
     context.update(
         {
