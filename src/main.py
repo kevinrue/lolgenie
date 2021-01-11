@@ -6,6 +6,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseSettings
 
 from . import configuration
+from . import riot
 
 
 class Settings(BaseSettings):
@@ -37,10 +38,12 @@ def index(request: Request):
 @app.get("/summoner/{summoner}")
 def summoner_get(request: Request, summoner: str):
     context = common_context
+    query = riot.get_summoner_data("euw1", summoner, settings.api_key)
+    print(query)
     context.update(
         {
             "request": request,
-            "summoner": summoner,
+            "query": query
         }
     )
     return templates.TemplateResponse("summoner.html", context)
