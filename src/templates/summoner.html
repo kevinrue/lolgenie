@@ -14,8 +14,12 @@
   </tr>
   {% for game in last_games['matches'] %}
   <tr>
-    <td>{{ game['gameId'] }}</td>
-    <td>{{ game['champion_name'] }}</td>
+    <td>{{game['gameId']}}</td>
+    <td>
+      <img src="http://ddragon.leagueoflegends.com/cdn/{{settings['latest_release']}}/img/champion/{{game['champion_name']}}.png"
+        width="30px"></img>
+      {{game['champion_name']}}
+    </td>
   </tr>
   {% endfor %}
 </table>
