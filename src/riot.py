@@ -2,7 +2,9 @@ import requests
 
 
 def get_json(url):
-    """Returns GET request OK status and content as JSON"""
+    """
+    Returns GET request OK status and content as JSON
+    """
     res = requests.get(url)
     return res.ok, res.json()
 
@@ -19,7 +21,7 @@ def get_summoner_data(region, summoner_name, api_key):
 
 def get_last_games(region, encrypted_account_id, api_key, start_index=0, end_index=20):
     """
-    Returns latest games data in JSON format and request OK status.
+    Returns latest games data in JSON format and request OK status
 
     Reference: https://developer.riotgames.com/apis#match-v4/GET_getMatchlist
     """
