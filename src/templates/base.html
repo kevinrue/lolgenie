@@ -37,7 +37,7 @@
             <form class="d-flex" action="{{url_for('summoner_form')}}" method="post">
 
               <div class="input-group me-2">
-                <input class="form-control" type="search" placeholder="Summoner name" aria-label="Search" id="summoner" name="summoner" style="width: 10em;">
+                <input class="form-control" type="search" placeholder="Summoner name" aria-label="Search" id="summoner" name="summoner" style="width: 10em;" required>
                 <select class="form-select" id="region_code" name="region_code" style="width: 6em;">
                   {% for region in settings["regions"] %}
                     <option value="{{region['code']}}">{{region['code']}}</option>
