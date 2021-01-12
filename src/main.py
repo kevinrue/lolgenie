@@ -1,3 +1,5 @@
+import copy
+
 from fastapi import FastAPI, Request, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -21,12 +23,18 @@ app.mount("/static", StaticFiles(directory="src/static"), name="static")
 
 templates = Jinja2Templates(directory="src/templates")
 
-common_context = {"settings": settings}
+common_context = {
+    "settings": settings,
+    "messages": [],
+}
+
+
+def get_context():
+    return copy.deepcopy(common_context)
 
 
 @app.get("/")
-def home(request: Request):
-    context = common_context
+def home(request: Request, context: dict = get_context()):
     context.update(
         {
             "request": request,
@@ -36,21 +44,27 @@ def home(request: Request):
 
 
 @app.get("/summoner/{summoner}")
-def summoner_get(request: Request, summoner: str):
-    context = common_context
-    query = riot.get_summoner_data("euw1", summoner, settings.api_key)
+def summoner_get(request: Request, summoner: str, context: dict = get_context()):
+    success, query = riot.get_summoner_data("euw1", summoner, settings.api_key)
+    if not success:
+        context["messages"].append(
+            ("error", f"Failed to retrieve summoner data: {query}")
+        )
     print(query)
     context.update(
         {
             "request": request,
             "query": query,
+            "success": success,
         }
     )
     return templates.TemplateResponse("summoner.html", context)
 
 
 @app.post("/summoner")
-def summoner_form(request: Request, summoner: str = Form(...)):
+def summoner_form(
+    request: Request, context: dict = get_context(), summoner: str = Form(...)
+):
     return RedirectResponse(
         url=f"/summoner/{summoner}", status_code=status.HTTP_303_SEE_OTHER
     )

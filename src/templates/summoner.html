@@ -2,7 +2,9 @@
 
 
 {% block content %}
-  <h1><span class="text-primary">{{query.name}}</span></h1>
-  <h2>Summoner level {{query.summonerLevel}}</h2>
-  <a href="{{url_for('home')}}">Go back to home</a>
+  {% if success %}  
+    <h1><span class="text-primary">{{query.name}}</span></h1>
+    <h2>Summoner level {{query.summonerLevel}}</h2>
+    <a href="{{url_for('home')}}">Go back to home</a>
+  {% endif %}
 {% endblock %}
