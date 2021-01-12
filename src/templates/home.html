@@ -4,24 +4,6 @@
 {% block content %}
   <h1>Home page</h1>
 
-  <h3>Test with form (POST request) (see for in navbar too)</h3>
-  <form action="{{url_for('summoner_form')}}" method="post" style="margin-bottom: 1em;">
-    <div class="row g-3 align-items-center">
-      <div class="col-auto">
-        <label for="summoner" class="col-form-label">Enter summoner name:</label>
-      </div>
-      <div class="col-auto">
-        <input type="text" id="summoner" class="form-control" aria-describedby="summoner" id="summoner" name="summoner">
-      </div>
-      <div class="col-auto">
-        <button type="submit" class="btn btn-primary">Search</button>
-      </div>
-    </div>
-  </form>
-
-  <h3>Test with GET request</h3>
-  <a href="{{url_for('summoner_get', summoner='Cyrlop')}}">Go to summoner Cyrlop from get request</a>
-
   <h3>API key</h3>
   {{settings.api_key}}
 {% endblock %}
