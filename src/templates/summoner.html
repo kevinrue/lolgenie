@@ -2,20 +2,24 @@
 
 
 {% block content %}
-  <h1><span class="text-primary">{{summoner_data.name}}</span></h1>
-  <h2>Summoner level {{summoner_data.summonerLevel}}</h2>
-  <h2>Latest games</h2>
-  <table>
-    <tr>
-      <th>Game ID</th>
-      <th>Champion</th>
-    </tr>
-    {% for game in last_games['matches'] %}
-    <tr>
-      <td>{{ game['gameId'] }}</td>
-      <td>{{ game['champion'] }}</td>
-    </tr>
+{% if success["summoner_data"] %}
+<h1><span class="text-primary">{{summoner_data.name}}</span></h1>
+<h2>Summoner level {{summoner_data.summonerLevel}}</h2>
+{% if success["last_games"] %}
+<h2>Latest games</h2>
+<table>
+  <tr>
+    <th>Game ID</th>
+    <th>Champion</th>
+  </tr>
+  {% for game in last_games['matches'] %}
+  <tr>
+    <td>{{ game['gameId'] }}</td>
+    <td>{{ game['champion'] }}</td>
+  </tr>
   {% endfor %}
-  </table>
-  <a href="{{url_for('home')}}">Go back to home</a>
+</table>
+{% endif %}
+<a href="{{url_for('home')}}">Go back to home</a>
+{% endif %}
 {% endblock %}

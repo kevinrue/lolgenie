@@ -1,3 +1,5 @@
+import copy
+
 from fastapi import FastAPI, Request, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -21,12 +23,18 @@ app.mount("/static", StaticFiles(directory="src/static"), name="static")
 
 templates = Jinja2Templates(directory="src/templates")
 
-common_context = {"settings": settings}
+common_context = {
+    "settings": settings,
+    "messages": [],
+}
+
+
+def get_context():
+    return copy.deepcopy(common_context)
 
 
 @app.get("/")
-def home(request: Request):
-    context = common_context
+def home(request: Request, context: dict = get_context()):
     context.update(
         {
             "request": request,
@@ -36,25 +44,45 @@ def home(request: Request):
 
 
 @app.get("/summoner/{summoner}")
-def summoner_get(request: Request, summoner: str):
-    context = common_context
+def summoner_get(request: Request, summoner: str, context: dict = get_context()):
     # TODO: parameterize hard-coded region
-    summoner_data = riot.get_summoner_data("euw1", summoner, settings.api_key)
+    success_summoner_data, summoner_data = riot.get_summoner_data(
+        "euw1", summoner, settings.api_key
+    )
     print(summoner_data)
-    last_games = riot.get_last_games("euw1", summoner_data['accountId'], settings.api_key, start_index = 0, end_index = 20)
-    print(last_games)
+    if not success_summoner_data:
+        context["messages"].append(
+            ("error", f"Failed to retrieve summoner data: {summoner_data}")
+        )
+        success_last_games = {}
+        last_games = {}
+    else:
+        success_last_games, last_games = riot.get_last_games(
+            "euw1",
+            summoner_data["accountId"],
+            settings.api_key,
+            start_index=0,
+            end_index=20,
+        )
+        print(last_games)
     context.update(
         {
             "request": request,
             "summoner_data": summoner_data,
             "last_games": last_games,
+            "success": {
+                "summoner_data": success_summoner_data,
+                "last_games": success_last_games,
+            },
         }
     )
     return templates.TemplateResponse("summoner.html", context)
 
 
 @app.post("/summoner")
-def summoner_form(request: Request, summoner: str = Form(...)):
+def summoner_form(
+    request: Request, context: dict = get_context(), summoner: str = Form(...)
+):
     return RedirectResponse(
         url=f"/summoner/{summoner}", status_code=status.HTTP_303_SEE_OTHER
     )

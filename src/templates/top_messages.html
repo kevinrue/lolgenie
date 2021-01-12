@@ -1,0 +1,13 @@
+{% if messages %}
+  {% for category, message in messages %}
+    {% if category in ["success", "info", "warning", "danger", "primary", "dark"] %}
+      {% set color = category %}
+    {% elif category == "error" %}
+      {% set color = "danger" %}
+    {% endif %}
+    <div class="alert alert-{{color|default('secondary')}} alert-dismissible fade show" role="alert">
+      {{message|safe}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
