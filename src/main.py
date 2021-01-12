@@ -65,6 +65,12 @@ def summoner_get(request: Request, summoner: str, context: dict = get_context())
             end_index=20,
         )
         print(last_games)
+    # Add champion name in each game
+    champions = riot.get_champions(release="11.1.1")
+    for game in last_games["matches"]:
+        game["champion_name"] = riot.get_champion_name_from_id(
+            str(game["champion"]), champions
+        )
     context.update(
         {
             "request": request,
