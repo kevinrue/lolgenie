@@ -45,17 +45,35 @@ def home(request: Request, context: dict = get_context()):
 
 @app.get("/summoner/{summoner}")
 def summoner_get(request: Request, summoner: str, context: dict = get_context()):
-    success, query = riot.get_summoner_data("euw1", summoner, settings.api_key)
-    if not success:
+    # TODO: parameterize hard-coded region
+    success_summoner_data, summoner_data = riot.get_summoner_data(
+        "euw1", summoner, settings.api_key
+    )
+    print(summoner_data)
+    if not success_summoner_data:
         context["messages"].append(
-            ("error", f"Failed to retrieve summoner data: {query}")
+            ("error", f"Failed to retrieve summoner data: {summoner_data}")
         )
-    print(query)
+        success_last_games = {}
+        last_games = {}
+    else:
+        success_last_games, last_games = riot.get_last_games(
+            "euw1",
+            summoner_data["accountId"],
+            settings.api_key,
+            start_index=0,
+            end_index=20,
+        )
+        print(last_games)
     context.update(
         {
             "request": request,
-            "query": query,
-            "success": success,
+            "summoner_data": summoner_data,
+            "last_games": last_games,
+            "success": {
+                "summoner_data": success_summoner_data,
+                "last_games": success_last_games,
+            },
         }
     )
     return templates.TemplateResponse("summoner.html", context)
