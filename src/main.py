@@ -55,6 +55,7 @@ def summoner_get(request: Request, summoner: str, context: dict = get_context())
         {
             "request": request,
             "query": query,
+            "success": success,
         }
     )
     return templates.TemplateResponse("summoner.html", context)
