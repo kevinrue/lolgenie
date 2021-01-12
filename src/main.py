@@ -63,7 +63,7 @@ def summoner_get(
         )
         print(last_games)
     # Add champion name in each game
-    champions = riot.get_champions(release="11.1.1")
+    champions = riot.get_champions(release=settings.latest_release)
     for game in last_games["matches"]:
         game["champion_name"] = riot.get_champion_name_from_id(
             str(game["champion"]), champions

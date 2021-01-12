@@ -8,9 +8,15 @@ def get_api_key():
     return key
 
 
+def get_latest_release():
+    latest_release = os.environ.get("LATEST_RELEASE", "11.1.1")
+    return latest_release
+
+
 class Settings(BaseSettings):
     app_name: str = "LoL genie"
     api_key: str = get_api_key()
+    latest_release = get_latest_release()
     # Regions (actually called platform) taken from https://developer.riotgames.com/docs/lol
     regions: list = [
         {"code": "EUW1", "host": "euw1.api.riotgames.com"},
