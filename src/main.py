@@ -5,32 +5,11 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from pydantic import BaseSettings
 
-from . import configuration
+from .configuration import settings
 from . import riot
 
 
-class Settings(BaseSettings):
-    app_name: str = "LoL genie"
-    api_key: str = configuration.get_api_key()
-    # Regions (actually called platform) taken from https://developer.riotgames.com/docs/lol
-    regions: list = [
-        {"code": "EUW1", "host": "euw1.api.riotgames.com"},
-        {"code": "BR1", "host": "br1.api.riotgames.com"},
-        {"code": "EUN1", "host": "eun1.api.riotgames.com"},
-        {"code": "JP1", "host": "jp1.api.riotgames.com"},
-        {"code": "KR", "host": "kr.api.riotgames.com"},
-        {"code": "LA1", "host": "la1.api.riotgames.com"},
-        {"code": "LA2", "host": "la2.api.riotgames.com"},
-        {"code": "NA1", "host": "na1.api.riotgames.com"},
-        {"code": "OC1", "host": "oc1.api.riotgames.com"},
-        {"code": "TR1", "host": "tr1.api.riotgames.com"},
-        {"code": "RU", "host": "ru.api.riotgames.com"},
-    ]
-
-
-settings = Settings()
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="src/static"), name="static")
