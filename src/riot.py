@@ -1,6 +1,9 @@
 import requests
 
-from .configuration import settings
+from . import configuration
+
+
+latest_release = configuration.settings.latest_release
 
 
 def get_json(url):
@@ -31,7 +34,7 @@ def get_last_games(region, encrypted_account_id, api_key, start_index=0, end_ind
     return get_json(url)
 
 
-def get_champions(release=settings.latest_release):
+def get_champions(release=latest_release):
     """
     Returns champions data.
 
@@ -63,7 +66,7 @@ def get_champion_name_from_id(id, champions):
     raise Exception("Champion not found")
 
 
-def get_champion_names_from_ids(ids, release=settings.latest_release):
+def get_champion_names_from_ids(ids, release=latest_release):
     """
     Returns a list of champion names from their identifiers.
 
