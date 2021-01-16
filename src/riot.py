@@ -73,7 +73,7 @@ def get_champion_name_from_id(id, champions):
     raise Exception("Champion not found")
 
 
-def get_champion_names_from_ids(ids, release=latest_release):
+def get_champion_names_from_ids(ids, champions, release=latest_release):
     """
     Returns a list of champion names from their identifiers.
 
@@ -83,5 +83,6 @@ def get_champion_names_from_ids(ids, release=latest_release):
         champions = get_champions(release)
         get_champion_names_from_ids(["1","120","120"])
     """
-    names = [get_champion_name_from_id(id, champions) for id in ids]
+    champ_ids_to_name = get_champions_map(champions, key="key", value="id")
+    names = [champ_ids_to_name[id] for id in ids]
     return names
