@@ -7,29 +7,40 @@
 
     <h2>General data</h2>
     <ul>
-      <li><b>Summoner level:</b> {{summoner_data.summonerLevel}}</li>
+      <li><b>Summoner level:</b> <span class="badge rounded-pill bg-success">{{summoner_data.summonerLevel}}</span></li>
     </ul>
   {% endif %}
 
+
   {% if success["last_games"] %}
     <h2>Latest games</h2>
-    <table>
-      <tr>
-        <th>Game ID</th>
-        <th>Champion</th>
-      </tr>
-      {% for game in last_games['matches'] %}
-      <tr>
-        <td>{{game['gameId']}}</td>
-        <td>
-          <img src="http://ddragon.leagueoflegends.com/cdn/{{settings['latest_release']}}/img/champion/{{game['champion_name']}}.png"
-            width="30px"></img>
-          {{game['champion_name']}}
-        </td>
-      </tr>
-      {% endfor %}
+
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Game ID</th>
+          <th>Champion</th>
+          <th>Lane</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for game in last_games['matches'] %}
+          <tr>
+            <td>{{game['gameId']}}</td>
+            <td>
+              <img src="http://ddragon.leagueoflegends.com/cdn/{{settings['latest_release']}}/img/champion/{{game['champion_name']}}.png"
+                width="30px"></img>
+              {{game['champion_name']}}
+            </td>
+            <td>
+              {% if game['lane'] != "NONE" %}
+                {{game['lane']}}
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
     </table>
   {% endif %}
   <a href="{{url_for('home')}}">Go back to home</a>
-
 {% endblock %}
