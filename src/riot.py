@@ -15,23 +15,23 @@ def get_json(url, api_key=configuration.settings.api_key):
     return res.ok, res.json()
 
 
-def get_summoner_data(region, summoner_name):
+def get_summoner_data(api_host, summoner_name):
     """
     Returns summoner data in JSON format and request OK status.
 
     Reference: https://developer.riotgames.com/apis#summoner-v4/GET_getBySummonerName
     """
-    url = f"https://{region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/{summoner_name}"
+    url = f"https://{api_host}/lol/summoner/v4/summoners/by-name/{summoner_name}"
     return get_json(url)
 
 
-def get_last_games(region, encrypted_account_id, start_index=0, end_index=20):
+def get_last_games(api_host, encrypted_account_id, start_index=0, end_index=20):
     """
     Returns latest games data in JSON format and request OK status
 
     Reference: https://developer.riotgames.com/apis#match-v4/GET_getMatchlist
     """
-    url = f"https://{region}.api.riotgames.com/lol/match/v4/matchlists/by-account/{encrypted_account_id}?beginIndex={start_index}&endIndex={end_index}"
+    url = f"https://{api_host}/lol/match/v4/matchlists/by-account/{encrypted_account_id}?beginIndex={start_index}&endIndex={end_index}"
     return get_json(url)
 
 
