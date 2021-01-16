@@ -3,7 +3,11 @@
 
 {% block content %}
   {% if success["summoner_data"] %}
-    <h1><span class="text-primary">{{summoner_data.name}}</span></h1>
+    <h1>
+      <span class="text-primary">{{summoner_data.name}}</span>
+      <img src="http://ddragon.leagueoflegends.com/cdn/{{settings['latest_release']}}/img/profileicon/{{summoner_data['profileIconId']}}.png"
+        width="50px"></img>
+    </h1>
 
     <h2>General data</h2>
     <ul>
