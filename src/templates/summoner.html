@@ -4,26 +4,32 @@
 {% block content %}
   {% if success["summoner_data"] %}
     <h1><span class="text-primary">{{summoner_data.name}}</span></h1>
-    <h2>Summoner level {{summoner_data.summonerLevel}}</h2>
-    {% if success["last_games"] %}
-      <h2>Latest games</h2>
-      <table>
-        <tr>
-          <th>Game ID</th>
-          <th>Champion</th>
-        </tr>
-        {% for game in last_games['matches'] %}
-        <tr>
-          <td>{{game['gameId']}}</td>
-          <td>
-            <img src="http://ddragon.leagueoflegends.com/cdn/{{settings['latest_release']}}/img/champion/{{game['champion_name']}}.png"
-              width="30px"></img>
-            {{game['champion_name']}}
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
-    {% endif %}
-    <a href="{{url_for('home')}}">Go back to home</a>
+
+    <h2>General data</h2>
+    <ul>
+      <li><b>Summoner level:</b> {{summoner_data.summonerLevel}}</li>
+    </ul>
   {% endif %}
+
+  {% if success["last_games"] %}
+    <h2>Latest games</h2>
+    <table>
+      <tr>
+        <th>Game ID</th>
+        <th>Champion</th>
+      </tr>
+      {% for game in last_games['matches'] %}
+      <tr>
+        <td>{{game['gameId']}}</td>
+        <td>
+          <img src="http://ddragon.leagueoflegends.com/cdn/{{settings['latest_release']}}/img/champion/{{game['champion_name']}}.png"
+            width="30px"></img>
+          {{game['champion_name']}}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% endif %}
+  <a href="{{url_for('home')}}">Go back to home</a>
+
 {% endblock %}
