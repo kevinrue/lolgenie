@@ -44,9 +44,7 @@ def summoner_get(
     # Initialize context
     extra_context = {"request": request, "success": {}}
     # Query summoner data
-    success_summoner_data, summoner_data = riot.get_summoner_data(
-        region_code, summoner, settings.api_key
-    )
+    success_summoner_data, summoner_data = riot.get_summoner_data(region_code, summoner)
     # Add success status to context
     extra_context["success"]["summoner_data"] = success_summoner_data
     # Add summoner data to context
@@ -61,7 +59,6 @@ def summoner_get(
         success_last_games, last_games = riot.get_last_games(
             region_code,
             summoner_data["accountId"],
-            settings.api_key,
             start_index=0,
             end_index=20,
         )
