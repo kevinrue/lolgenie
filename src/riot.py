@@ -48,6 +48,13 @@ def get_champions(release=latest_release):
     return champions
 
 
+def get_champions_map(champions, key="key", value="id"):
+    """
+    Returns a champion dict mapping key to value
+    """
+    return {champ[key]: champ[value] for champ in champions.values()}
+
+
 def get_champion_name_from_id(id, champions):
     """
     Returns a list of champion names from their identifiers.
