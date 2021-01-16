@@ -73,14 +73,13 @@ def summoner_get(
         context["messages"].append(
             ("error", f"Failed to retrieve match history data: {last_games}")
         )
-    if success_summoner_data and success_last_games:
+    elif success_summoner_data and success_last_games:
         # Fetch champion data
         champions = riot.get_champions(release="11.1.1")
+        champ_ids_to_names = riot.get_champions_map(champions, key="key", value="id")
         # Add champion name to each game, if the match history was succesfully queried
         for game in last_games["matches"]:
-            game["champion_name"] = riot.get_champion_name_from_id(
-                str(game["champion"]), champions
-            )
+            game["champion_name"] = champ_ids_to_names[str(game["champion"])]
         # Add match history data to context
         extra_context["last_games"] = last_games
     # Update context
