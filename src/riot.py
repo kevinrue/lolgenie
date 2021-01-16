@@ -1,3 +1,4 @@
+from datetime import datetime
 import requests
 
 from . import configuration
@@ -86,3 +87,13 @@ def get_champion_names_from_ids(ids, champions, release=latest_release):
     champ_ids_to_names = get_champions_map(champions, key="key", value="id")
     names = [champ_ids_to_names[id] for id in ids]
     return names
+
+
+def get_datetime_from_timestamp(timestamp):
+    """
+    From the doc: https://riot-api-libraries.readthedocs.io/en/latest/specifics.html
+    "The creation date timestamps in milliseconds (not seconds)."
+
+    Returns: datetime object
+    """
+    return datetime.fromtimestamp(timestamp / 1000)
