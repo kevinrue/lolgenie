@@ -6,7 +6,7 @@ from . import configuration
 settings = configuration.settings
 
 
-def get_json(url, api_key=configuration.settings.api_key):
+def get_json(url, api_key=settings.api_key):
     """
     Returns GET request OK status and content as JSON
     """
