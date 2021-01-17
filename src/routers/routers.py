@@ -73,7 +73,7 @@ def summoner_get(
         )
     elif success_summoner_data and success_last_games:
         # Fetch champion data
-        champions = riot.get_champions(release="11.1.1")
+        champions = riot.get_champions(release=settings.latest_release)
         champ_ids_to_names = riot.get_champions_map(champions, key="key", value="id")
         # Add champion data to each game, if the match history was succesfully queried
         for game in last_games["matches"]:
