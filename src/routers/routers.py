@@ -4,8 +4,7 @@ from fastapi import APIRouter, Request, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from .. import configuration
-from .. import riot
+from .. import configuration, riot, data_lib
 
 
 router = APIRouter(prefix="")
@@ -82,6 +81,10 @@ def summoner_get(
             game["datetime_readable"] = game_datetime.strftime("%H:%M - %B %d, %Y")
         # Add match history data to context
         extra_context["last_games"] = last_games
+        # Add most played champions plot data
+        extra_context["plot"] = {
+            "most_played_champs": data_lib.most_played_champs_plot_data(last_games)
+        }
     # Update context
     context.update(extra_context)
     return templates.TemplateResponse("summoner.html", context)
