@@ -3,39 +3,39 @@ import requests
 
 from . import configuration
 
+settings = configuration.settings
 
-latest_release = configuration.settings.latest_release
 
-
-def get_json(url):
+def get_json(url, api_key=settings.api_key):
     """
     Returns GET request OK status and content as JSON
     """
-    res = requests.get(url)
+    headers = {"X-Riot-Token": api_key}
+    res = requests.get(url, headers=headers)
     return res.ok, res.json()
 
 
-def get_summoner_data(region, summoner_name, api_key):
+def get_summoner_data(api_host, summoner_name):
     """
     Returns summoner data in JSON format and request OK status.
 
     Reference: https://developer.riotgames.com/apis#summoner-v4/GET_getBySummonerName
     """
-    url = f"https://{region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/{summoner_name}?api_key={api_key}"
+    url = f"https://{api_host}/lol/summoner/v4/summoners/by-name/{summoner_name}"
     return get_json(url)
 
 
-def get_last_games(region, encrypted_account_id, api_key, start_index=0, end_index=20):
+def get_last_games(api_host, encrypted_account_id, start_index=0, end_index=20):
     """
     Returns latest games data in JSON format and request OK status
 
     Reference: https://developer.riotgames.com/apis#match-v4/GET_getMatchlist
     """
-    url = f"https://{region}.api.riotgames.com/lol/match/v4/matchlists/by-account/{encrypted_account_id}?api_key={api_key}&beginIndex={start_index}&endIndex={end_index}"
+    url = f"https://{api_host}/lol/match/v4/matchlists/by-account/{encrypted_account_id}?beginIndex={start_index}&endIndex={end_index}"
     return get_json(url)
 
 
-def get_champions(release=latest_release):
+def get_champions(release=settings.latest_release):
     """
     Returns champions data.
 
@@ -74,7 +74,7 @@ def get_champion_name_from_id(id, champions):
     raise Exception("Champion not found")
 
 
-def get_champion_names_from_ids(ids, champions, release=latest_release):
+def get_champion_names_from_ids(ids, champions, release=settings.latest_release):
     """
     Returns a list of champion names from their identifiers.
 

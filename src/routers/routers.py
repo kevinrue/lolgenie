@@ -38,15 +38,14 @@ def home(request: Request, context: dict = get_context()):
 def summoner_get(
     request: Request,
     summoner: str,
-    region_code: str = "euw1",
+    region_code: str = "EUW1",
     context: dict = get_context(),
 ):
     # Initialize context
     extra_context = {"request": request, "success": {}}
+    api_host = settings.get_api_host(region_code)
     # Query summoner data
-    success_summoner_data, summoner_data = riot.get_summoner_data(
-        region_code, summoner, settings.api_key
-    )
+    success_summoner_data, summoner_data = riot.get_summoner_data(api_host, summoner)
     # Add success status to context
     extra_context["success"]["summoner_data"] = success_summoner_data
     # Add summoner data to context
@@ -59,9 +58,8 @@ def summoner_get(
     else:
         # Query match history if summoner account id was successfully queried
         success_last_games, last_games = riot.get_last_games(
-            region_code,
+            api_host,
             summoner_data["accountId"],
-            settings.api_key,
             start_index=0,
             end_index=20,
         )
