@@ -4,7 +4,7 @@ from fastapi import APIRouter, Request, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from .. import configuration, riot, data_lib
+from .. import configuration, riot, data_lib, other_utils
 
 
 router = APIRouter(prefix="")
@@ -96,7 +96,7 @@ def summoner_get(
         # Add champion data to each match, if the match history was succesfully queried
         for match in last_matches["matches"]:
             match["champion_name"] = champ_ids_to_names[str(match["champion"])]
-            match_datetime = riot.get_datetime_from_timestamp(match["timestamp"])
+            match_datetime = other_utils.get_datetime_from_timestamp(match["timestamp"])
             match["datetime_readable"] = match_datetime.strftime("%H:%M - %B %d, %Y")
         # Add match history data to context
         extra_context["last_matches"] = last_matches
