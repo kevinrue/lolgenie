@@ -25,6 +25,18 @@ def get_summoner_data(api_host, summoner_name):
     return get_json(url)
 
 
+def get_summoner_league_data(api_host, encrypted_summoner_id):
+    """
+    Returns summoner league data in JSON format and request OK status.
+
+    Reference: https://developer.riotgames.com/apis#league-v4/GET_getLeagueEntriesForSummoner
+    """
+    url = (
+        f"https://{api_host}/lol/league/v4/entries/by-summoner/{encrypted_summoner_id}"
+    )
+    return get_json(url)
+
+
 def get_last_games(api_host, encrypted_account_id, start_index=0, end_index=20):
     """
     Returns latest games data in JSON format and request OK status

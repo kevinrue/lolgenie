@@ -64,6 +64,25 @@ def summoner_get(
         )
         # Add success status to context
         extra_context["success"]["last_games"] = success_last_games
+        # Query league data if summoner account id was successfully queried
+        (
+            success_summoner_league_data,
+            summoner_league_data,
+        ) = riot.get_summoner_league_data(
+            api_host,
+            summoner_data["id"],
+        )
+        for league_data in summoner_league_data:
+            league_data["wins_percent"] = round(
+                league_data["wins"]
+                / (league_data["wins"] + league_data["losses"])
+                * 100,
+                2,
+            )
+        # Add success status to context
+        extra_context["success"]["summoner_league_data"] = success_summoner_league_data
+        # Add summoner league data to context
+        extra_context["summoner_league_data"] = summoner_league_data
     # Add champion data in each game
     if success_summoner_data and not success_last_games:
         # Add banner if the match history query failed

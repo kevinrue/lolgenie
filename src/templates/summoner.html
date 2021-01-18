@@ -14,6 +14,17 @@
 <h2>General data</h2>
 <ul>
   <li><b>Summoner level:</b> <span class="badge rounded-pill bg-success">{{summoner_data.summonerLevel}}</span></li>
+  {% for league_data in summoner_league_data %}
+  <li><b>Queue type:</b> {{league_data.queueType}}</li>
+  <ul>
+    <li><b>Tier:</b> {{league_data.tier}} {{league_data.rank}}</li>
+    <li><b>League points (LP):</b> {{league_data.leaguePoints}}</li>
+    <li><b>Win / Loss:</b> {{league_data.wins}} / {{league_data.losses}} ({{ league_data.wins_percent }} %) </li>
+    {% if league_data.hotStreak %}
+    <li><b>Hot streak!</b></li>
+    {% endif %}
+  </ul>
+  {% endfor %}
 </ul>
 {% endif %}
 
