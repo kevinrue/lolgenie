@@ -4,8 +4,7 @@ from fastapi import APIRouter, Request, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from .. import configuration
-from .. import riot
+from .. import configuration, riot, data_lib
 
 
 router = APIRouter(prefix="")
@@ -73,7 +72,7 @@ def summoner_get(
         )
     elif success_summoner_data and success_last_games:
         # Fetch champion data
-        champions = riot.get_champions(release="11.1.1")
+        champions = riot.get_champions(release=settings.latest_release)
         champ_ids_to_names = riot.get_champions_map(champions, key="key", value="id")
         # Add champion data to each game, if the match history was succesfully queried
         for game in last_games["matches"]:
@@ -82,6 +81,10 @@ def summoner_get(
             game["datetime_readable"] = game_datetime.strftime("%H:%M - %B %d, %Y")
         # Add match history data to context
         extra_context["last_games"] = last_games
+        # Add most played champions plot data
+        extra_context["plot"] = {
+            "most_played_champs": data_lib.most_played_champs_plot_data(last_games)
+        }
     # Update context
     context.update(extra_context)
     return templates.TemplateResponse("summoner.html", context)
