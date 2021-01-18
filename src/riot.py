@@ -37,9 +37,9 @@ def get_summoner_league_data(api_host, encrypted_summoner_id):
     return get_json(url)
 
 
-def get_last_games(api_host, encrypted_account_id, start_index=0, end_index=20):
+def get_last_matches(api_host, encrypted_account_id, start_index=0, end_index=20):
     """
-    Returns latest games data in JSON format and request OK status
+    Returns latest matches data in JSON format and request OK status
 
     Reference: https://developer.riotgames.com/apis#match-v4/GET_getMatchlist
     """

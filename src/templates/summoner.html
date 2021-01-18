@@ -30,9 +30,9 @@
 
 
 <div class="row">
-  {% if success["last_games"] %}
+  {% if success["last_matches"] %}
   <div class="col-7">
-    <h2>Latest games</h2>
+    <h2>Latest matches</h2>
     <table class="table table-striped table-hover">
       <thead>
         <tr>
@@ -43,22 +43,22 @@
         </tr>
       </thead>
       <tbody>
-        {% for game in last_games['matches'] %}
+        {% for match in last_matches['matches'] %}
         <tr>
-          <td>{{game['gameId']}}</td>
+          <td>{{match['gameId']}}</td>
           <td>
             <img
-              src="http://ddragon.leagueoflegends.com/cdn/{{settings['latest_release']}}/img/champion/{{game['champion_name']}}.png"
+              src="http://ddragon.leagueoflegends.com/cdn/{{settings['latest_release']}}/img/champion/{{match['champion_name']}}.png"
               width="30px"></img>
-            {{game['champion_name']}}
+            {{match['champion_name']}}
           </td>
           <td>
-            {% if game['lane'] != "NONE" %}
-            {{game['lane']}}
+            {% if match['lane'] != "NONE" %}
+            {{match['lane']}}
             {% endif %}
           </td>
           <td>
-            {{game['datetime_readable']}}
+            {{match['datetime_readable']}}
           </td>
         </tr>
         {% endfor %}

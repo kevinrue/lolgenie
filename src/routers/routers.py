@@ -56,14 +56,14 @@ def summoner_get(
         )
     else:
         # Query match history if summoner account id was successfully queried
-        success_last_games, last_games = riot.get_last_games(
+        success_last_matches, last_matches = riot.get_last_matches(
             api_host,
             summoner_data["accountId"],
             start_index=0,
             end_index=20,
         )
         # Add success status to context
-        extra_context["success"]["last_games"] = success_last_games
+        extra_context["success"]["last_matches"] = success_last_matches
         # Query league data if summoner account id was successfully queried
         (
             success_summoner_league_data,
@@ -83,26 +83,26 @@ def summoner_get(
         extra_context["success"]["summoner_league_data"] = success_summoner_league_data
         # Add summoner league data to context
         extra_context["summoner_league_data"] = summoner_league_data
-    # Add champion data in each game
-    if success_summoner_data and not success_last_games:
+    # Add champion data in each match
+    if success_summoner_data and not success_last_matches:
         # Add banner if the match history query failed
         context["messages"].append(
-            ("error", f"Failed to retrieve match history data: {last_games}")
+            ("error", f"Failed to retrieve match history data: {last_matches}")
         )
-    elif success_summoner_data and success_last_games:
+    elif success_summoner_data and success_last_matches:
         # Fetch champion data
         champions = riot.get_champions(release=settings.latest_release)
         champ_ids_to_names = riot.get_champions_map(champions, key="key", value="id")
-        # Add champion data to each game, if the match history was succesfully queried
-        for game in last_games["matches"]:
-            game["champion_name"] = champ_ids_to_names[str(game["champion"])]
-            game_datetime = riot.get_datetime_from_timestamp(game["timestamp"])
-            game["datetime_readable"] = game_datetime.strftime("%H:%M - %B %d, %Y")
+        # Add champion data to each match, if the match history was succesfully queried
+        for match in last_matches["matches"]:
+            match["champion_name"] = champ_ids_to_names[str(match["champion"])]
+            match_datetime = riot.get_datetime_from_timestamp(match["timestamp"])
+            match["datetime_readable"] = match_datetime.strftime("%H:%M - %B %d, %Y")
         # Add match history data to context
-        extra_context["last_games"] = last_games
+        extra_context["last_matches"] = last_matches
         # Add most played champions plot data
         extra_context["plot"] = {
-            "most_played_champs": data_lib.most_played_champs_plot_data(last_games)
+            "most_played_champs": data_lib.most_played_champs_plot_data(last_matches)
         }
     # Update context
     context.update(extra_context)
