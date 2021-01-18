@@ -4,7 +4,7 @@ from fastapi import APIRouter, Request, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from .. import configuration, riot, data_lib, other_utils
+from .. import configuration, riot, data_utils, other_utils
 
 
 router = APIRouter(prefix="")
@@ -102,7 +102,7 @@ def summoner_get(
         extra_context["last_matches"] = last_matches
         # Add most played champions plot data
         extra_context["plot"] = {
-            "most_played_champs": data_lib.most_played_champs_plot_data(last_matches)
+            "most_played_champs": data_utils.most_played_champs_plot_data(last_matches)
         }
     # Update context
     context.update(extra_context)
