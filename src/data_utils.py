@@ -12,15 +12,15 @@ colors_to_rgb = {
 }
 
 
-def most_played_champs_plot_data(last_games):
+def most_played_champs_plot_data(last_matches):
     """
     Returns a ChartJS friendly dictionary to use as JSON in template (data)
     """
     # Get most played champions as a Counter object
     champions_counter = Counter()
 
-    for game in last_games["matches"]:
-        champions_counter[game["champion_name"]] += 1
+    for match in last_matches["matches"]:
+        champions_counter[match["champion_name"]] += 1
 
     champions_counter_ordered = OrderedDict(champions_counter.most_common())
 

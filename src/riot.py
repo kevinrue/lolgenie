@@ -1,4 +1,3 @@
-from datetime import datetime
 import requests
 
 from . import configuration
@@ -37,9 +36,9 @@ def get_summoner_league_data(api_host, encrypted_summoner_id):
     return get_json(url)
 
 
-def get_last_games(api_host, encrypted_account_id, start_index=0, end_index=20):
+def get_last_matches(api_host, encrypted_account_id, start_index=0, end_index=20):
     """
-    Returns latest games data in JSON format and request OK status
+    Returns latest matches data in JSON format and request OK status
 
     Reference: https://developer.riotgames.com/apis#match-v4/GET_getMatchlist
     """
@@ -99,13 +98,3 @@ def get_champion_names_from_ids(ids, champions, release=settings.latest_release)
     champ_ids_to_names = get_champions_map(champions, key="key", value="id")
     names = [champ_ids_to_names[id] for id in ids]
     return names
-
-
-def get_datetime_from_timestamp(timestamp):
-    """
-    From the doc: https://riot-api-libraries.readthedocs.io/en/latest/specifics.html
-    "The creation date timestamps in milliseconds (not seconds)."
-
-    Returns: datetime object
-    """
-    return datetime.fromtimestamp(timestamp / 1000)
