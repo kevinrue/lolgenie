@@ -4,28 +4,28 @@
 {% block content %}
 
 {% if success["summoner_data"] %}
-<h1>
-  <span class="text-primary">{{summoner_data.name}}</span>
-  <img
-    src="http://ddragon.leagueoflegends.com/cdn/{{settings['latest_release']}}/img/profileicon/{{summoner_data['profileIconId']}}.png"
-    width="50px"></img>
-</h1>
+  <h1>
+    <span class="text-primary">{{summoner_data.name}}</span>
+    <img
+      src="http://ddragon.leagueoflegends.com/cdn/{{settings['latest_release']}}/img/profileicon/{{summoner_data['profileIconId']}}.png"
+      width="50px"></img>
+  </h1>
 
-<h2>General data</h2>
-<ul>
-  <li><b>Summoner level:</b> <span class="badge rounded-pill bg-success">{{summoner_data.summonerLevel}}</span></li>
-  {% for league_data in summoner_league_data %}
-    <li><b>Queue type:</b> {{league_data.queueType}}</li>
-    <ul>
-      <li><b>Tier:</b> {{league_data.tier}} {{league_data.rank}}</li>
-      <li><b>League points (LP):</b> {{league_data.leaguePoints}}</li>
-      <li><b>Win / Loss:</b> {{league_data.wins}} / {{league_data.losses}} ({{ league_data.wins_percent }} %) </li>
-      {% if league_data.hotStreak %}
-        <li><b>Hot streak!</b></li>
-      {% endif %}
-    </ul>
-  {% endfor %}
-</ul>
+  <h2>General data</h2>
+  <ul>
+    <li><b>Summoner level:</b> <span class="badge rounded-pill bg-success">{{summoner_data.summonerLevel}}</span></li>
+    {% for league_data in summoner_league_data %}
+      <li><b>Queue type:</b> {{league_data.queueType}}</li>
+      <ul>
+        <li><b>Tier:</b> {{league_data.tier}} {{league_data.rank}}</li>
+        <li><b>League points (LP):</b> {{league_data.leaguePoints}}</li>
+        <li><b>Win / Loss:</b> {{league_data.wins}} / {{league_data.losses}} ({{ league_data.wins_percent }} %) </li>
+        {% if league_data.hotStreak %}
+          <li><b>Hot streak!</b></li>
+        {% endif %}
+      </ul>
+    {% endfor %}
+  </ul>
 {% endif %}
 
 
@@ -44,23 +44,23 @@
         </thead>
         <tbody>
           {% for match in last_matches['matches'] %}
-          <tr>
-            <td>{{match['gameId']}}</td>
-            <td>
-              <img
-                src="http://ddragon.leagueoflegends.com/cdn/{{settings['latest_release']}}/img/champion/{{match['champion_name']}}.png"
-                width="30px"></img>
-              {{match['champion_name']}}
-            </td>
-            <td>
-              {% if match['lane'] != "NONE" %}
-              {{match['lane']}}
-              {% endif %}
-            </td>
-            <td>
-              {{match['datetime_readable']}}
-            </td>
-          </tr>
+            <tr>
+              <td>{{match['gameId']}}</td>
+              <td>
+                <img
+                  src="http://ddragon.leagueoflegends.com/cdn/{{settings['latest_release']}}/img/champion/{{match['champion_name']}}.png"
+                  width="30px"></img>
+                {{match['champion_name']}}
+              </td>
+              <td>
+                {% if match['lane'] != "NONE" %}
+                {{match['lane']}}
+                {% endif %}
+              </td>
+              <td>
+                {{match['datetime_readable']}}
+              </td>
+            </tr>
           {% endfor %}
         </tbody>
       </table>
@@ -109,11 +109,7 @@
     </div><!-- /col -->
   {% endif %}
 
-
-
 </div><!-- /row -->
-
-
 
 
 
