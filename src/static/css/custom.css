@@ -1,0 +1,30 @@
+/*****************************************
+********* TreantJS tree CSS
+*****************************************/
+/* Champions history tree */
+.node-class {
+    padding: 5px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    /* background-color: #ffffff; */
+    border: 1px solid #000;
+    width: 220px;
+    font-size: 13px;
+    overflow: auto;
+}
+.node-name {
+    font-weight: bold;
+    font-size: 15px;
+}
+.node > p {
+    margin: 0;
+}
+.node-champion {
+    /*color:black;*/
+    /*background-color: #ffeeee;*/
+}
+.node-champion > img {
+    width: 42px;
+    margin-right: 5px;
+}

@@ -104,6 +104,23 @@ def summoner_get(
         extra_context["plot"] = {
             "most_played_champs": data_utils.most_played_champs_plot_data(last_matches)
         }
+
+    # History tree - By champion
+    # TODO: Only get the data for a specific queue no point having the aram champions etc...
+    try:
+        history_tree_champ_data = data_utils.get_history_tree_champ_data(
+            last_matches["matches"]
+        )
+        extra_context["history_tree_champ_data"] = history_tree_champ_data
+        extra_context["success"]["champ_history_tree"] = True
+    except:
+        context["messages"].append(
+            ("error", f"Something went wrong while getting champion tree data")
+        )
+        extra_context["success"]["champ_history_tree"] = False
+
+    # TODO: History tree - By lane
+
     # Update context
     context.update(extra_context)
     return templates.TemplateResponse("summoner.html", context)

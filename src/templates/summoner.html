@@ -2,6 +2,12 @@
 
 
 {% block content %}
+  <!-- Treant CSS and JS: https://fperucic.github.io/treant-js/ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.min.js" integrity="sha512-ADpWKsaOuAegRSoUObE1si2VF6HQJyQR3Zy44l7s6YsGA6BnPIrIwN9uKJ0rsMhtDAMFqnGZhQXMJcsWSp40pA==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js" integrity="sha512-tBzZQxySO5q5lqwLWfu8Q+o4VkTcRGOeQGVQ0ueJga4A1RKuzmAu5HXDOXLEjpbKyV7ow9ympVoa6wZLEzRzDg==" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/treant-js/1.0/Treant.css" integrity="sha512-ySoXPqkgXC7K7IS5vOdi47uEpct2yJ3MkYVVVHiM7FOmdDnBUVSmB/D1ps2Pf6jBJnBMyh1EPJLpWh2uCzOLdg==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="{{url_for('static', path='/css/custom.css')}}"/>
+
 
   {% if success["summoner_data"] %}
     <h1>
@@ -110,5 +116,52 @@
     {% endif %}
 
   </div><!-- /row -->
+
+
+
+  {% if success["champ_history_tree"] %}
+    <div class="row">
+      <div class="col-12">
+        <h2>History tree (by champion)</h2>
+        <div id="history_tree_champ_div"></div>
+      </div><!-- /col -->
+    </div><!-- /row -->
+
+
+    <script type="text/javascript">
+      var history_tree_champ_data = {{history_tree_champ_data|tojson|safe}};
+    </script>
+  
+    <script type="text/javascript">
+      simple_chart_config = {
+        chart: {
+          container: "#history_tree_champ_div",
+          hideRootNode: true,
+          levelSeparation: 60,
+          siblingSeparation: 6,
+          subTeeSeparation: 12,
+          animateOnInit: false,
+          rootOrientation: "WEST",
+          nodeAlign: "BOTTOM",
+          connectors: {
+            type: "step",
+            style: {
+              "stroke-width": 1,
+              "arrow-end": "classic-wide-long",
+            }
+          },
+          node: {
+            HTMLclass: "node-class",
+            collapsable: false
+          }
+        },
+        nodeStructure: history_tree_champ_data
+      };
+      var my_chart = new Treant(simple_chart_config);
+    </script>
+
+
+  {% endif %}
+
 
 {% endblock %}
