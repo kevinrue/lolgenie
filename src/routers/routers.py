@@ -99,8 +99,8 @@ def summoner_get(
     # History tree - By champion
     # TODO: Only get the data for a specific queue no point having the aram champions etc...
     try:
-        history_tree_champ_data = data_utils.get_history_tree_champ_data(
-            last_matches["matches"]
+        history_tree_champ_data = data_utils.get_history_tree_data(
+            last_matches["matches"], "champion_name"
         )
         extra_context["history_tree_champ_data"] = history_tree_champ_data
         extra_context["success"]["champ_history_tree"] = True

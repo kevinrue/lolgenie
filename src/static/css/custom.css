@@ -20,11 +20,11 @@
 .node > p {
     margin: 0;
 }
-.node-champion {
+.node-custom {
     /*color:black;*/
     /*background-color: #ffeeee;*/
 }
-.node-champion > img {
+.node-custom > img {
     width: 42px;
     margin-right: 5px;
 }
