@@ -1,7 +1,7 @@
 
 var basic_history_chart = {
     hideRootNode: true,
-    levelSeparation: 60,
+    levelSeparation: 30,
     siblingSeparation: 6,
     subTeeSeparation: 12,
     animateOnInit: false,
