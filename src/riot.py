@@ -1,10 +1,12 @@
 import requests
 
-from . import configuration
+from . import configuration, other_utils
 
 settings = configuration.settings
 
-
+################################################
+######## Helper functions
+################################################
 def get_json(url, api_key=settings.api_key):
     """
     Returns GET request OK status and content as JSON
@@ -14,6 +16,9 @@ def get_json(url, api_key=settings.api_key):
     return res.ok, res.json()
 
 
+################################################
+######## Basic calls to Riot API
+################################################
 def get_summoner_data(api_host, summoner_name):
     """
     Returns summoner data in JSON format and request OK status.
@@ -98,3 +103,43 @@ def get_champion_names_from_ids(ids, champions, release=settings.latest_release)
     champ_ids_to_names = get_champions_map(champions, key="key", value="id")
     names = [champ_ids_to_names[id] for id in ids]
     return names
+
+
+################################################
+######## Enriched calls to Riot API
+################################################
+def get_last_matches_enriched(
+    api_host,
+    encrypted_account_id,
+    start_index=0,
+    end_index=20,
+    release=settings.latest_release,
+):
+    """
+    Returns latest matches data in JSON format enriched with:
+    - Champion names
+    - Datetime
+    """
+    # 1. Query match history
+    success_last_matches, last_matches = get_last_matches(
+        api_host,
+        encrypted_account_id,
+        start_index=0,
+        end_index=20,
+    )
+    if not success_last_matches:
+        raise Exception(f"Failed to retrieve match history data: {last_matches}")
+
+    # 2. Add champion data in each match
+    # Fetch champion data
+    champions = get_champions(release=settings.latest_release)
+    champ_ids_to_names = get_champions_map(champions, key="key", value="id")
+    # Add champion data to each match, if the match history was succesfully queried
+    for match in last_matches["matches"]:
+        match["champion_name"] = champ_ids_to_names[str(match["champion"])]
+        match_datetime = other_utils.get_datetime_from_timestamp(match["timestamp"])
+        match["datetime_readable"] = match_datetime.strftime("%H:%M - %B %d, %Y")
+
+    # TODO: 3. Add won/lost status to each match
+
+    return success_last_matches, last_matches
