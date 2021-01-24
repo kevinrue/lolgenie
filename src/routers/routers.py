@@ -103,12 +103,12 @@ def summoner_get(
             last_matches["matches"], "champion_name"
         )
         extra_context["history_tree_champ_data"] = history_tree_champ_data
-        extra_context["success"]["champ_history_tree"] = True
+        extra_context["success"]["history_tree_champ"] = True
     except:
         context["messages"].append(
             ("error", f"Something went wrong while getting champion tree data")
         )
-        extra_context["success"]["champ_history_tree"] = False
+        extra_context["success"]["history_tree_champ"] = False
 
     # TODO: History tree - By lane
 
