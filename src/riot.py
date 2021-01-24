@@ -16,6 +16,22 @@ def get_json(url, api_key=settings.api_key):
     return res.ok, res.json()
 
 
+def get_image_url(key, value, release=settings.latest_release):
+    """
+    Returns the URL of an image for multiple objects
+    Params:
+        - key: type of object
+        - value: object identifier to build the url
+        - release: Current release of the game
+    """
+    if key == "champion_name":
+        return (
+            f"http://ddragon.leagueoflegends.com/cdn/{release}/img/champion/{value}.png"
+        )
+    else:
+        return None
+
+
 ################################################
 ######## Basic calls to Riot API
 ################################################

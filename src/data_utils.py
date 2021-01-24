@@ -1,7 +1,7 @@
 from collections import Counter, OrderedDict
 import copy
 
-from . import configuration, other_utils
+from . import configuration, other_utils, riot
 
 settings = configuration.settings
 
@@ -44,51 +44,59 @@ def most_played_champs_plot_data(last_matches):
     return data
 
 
-def get_history_tree_champ_data(last_matches):
+def get_history_tree_data(last_matches, match_key):
     """
     Returns a TreantJS friendly dictionnary
     The returned dict can be directly parsed to json and used as input for TreantJS
     Ref: https://fperucic.github.io/treant-js/
 
     Input
-        last_matches: list of matches containing champion data (most recent first)
+        last_matches: list of matches containing the match_key (most recent first)
+        match_key: key used for each node of the tree (ex: champion_name)
     """
     # TODO: Use recursion instead of hard coding levels 1, 2 and 3
     # TODO: Add winrate at each level
 
-    # Compute champions data
-    champions_played = OrderedDict()
+    # Compute data by entity (according to match_key; champions, lanes, ...)
+    data = OrderedDict()
     default_dict = {"count": 0, "next": OrderedDict()}
 
     for i, match in enumerate(last_matches):
         # First level
-        champ_name = match["champion_name"]
-        champions_played.setdefault(champ_name, copy.deepcopy(default_dict))
-        champions_played[champ_name]["count"] += 1
+        match_value = match.get(match_key, None)
+        if match_value in [None, "NONE"]:
+            # That can happen, for example if match_key = "lane", there are matches with no lane
+            continue
+        data.setdefault(match_value, copy.deepcopy(default_dict))
+        data[match_value]["count"] += 1
 
         # Second level (get check next match)
         if i >= 1:
             l2_match = last_matches[i - 1]
-            l2_champ_name = l2_match["champion_name"]
-            champions_played[champ_name]["next"].setdefault(
-                l2_champ_name, copy.deepcopy(default_dict)
+            l2_match_value = l2_match.get(match_key, None)
+            if l2_match_value in [None, "NONE"]:
+                continue
+            data[match_value]["next"].setdefault(
+                l2_match_value, copy.deepcopy(default_dict)
             )
-            champions_played[champ_name]["next"][l2_champ_name]["count"] += 1
+            data[match_value]["next"][l2_match_value]["count"] += 1
 
             # Third level (get check next match again)
             if i >= 2:
                 l3_match = last_matches[i - 2]
-                l3_champ_name = l3_match["champion_name"]
-                champions_played[champ_name]["next"][l2_champ_name]["next"].setdefault(
-                    l3_champ_name, copy.deepcopy(default_dict)
+                l3_match_value = l3_match.get(match_key, None)
+                if l3_match_value in [None, "NONE"]:
+                    continue
+                data[match_value]["next"][l2_match_value]["next"].setdefault(
+                    l3_match_value, copy.deepcopy(default_dict)
                 )
-                champions_played[champ_name]["next"][l2_champ_name]["next"][
-                    l3_champ_name
-                ]["count"] += 1
+                data[match_value]["next"][l2_match_value]["next"][l3_match_value][
+                    "count"
+                ] += 1
 
     # Sort data (most played champions on top)
-    champions_played = other_utils.sort_ordered_dict(champions_played, "count", True)
-    for l1_data in champions_played.values():
+    data = other_utils.sort_ordered_dict(data, "count", True)
+    for l1_data in data.values():
         for l2_data in l1_data["next"].values():
             l2_data["next"] = other_utils.sort_ordered_dict(
                 l2_data["next"], "count", True
@@ -99,38 +107,44 @@ def get_history_tree_champ_data(last_matches):
     tree_data = {"text": {"name": "Root"}, "children": []}
 
     # First level
-    for champ_name, champ_data in champions_played.items():
+    for match_value, data in data.items():
         node_data = {
             "text": {
-                "name": champ_name,
-                "title": f"Played {champ_data['count']} time(s)",
+                "name": match_value,
+                "title": f"Played {data['count']} time(s)",
             },
-            "image": f"http://ddragon.leagueoflegends.com/cdn/{settings.latest_release}/img/champion/{champ_name}.png",
-            "HTMLclass": "node-champion",
+            "HTMLclass": "node-custom",
             "children": [],
         }
+        image = riot.get_image_url(key=match_key, value=match_value)
+        if image is not None:
+            node_data["image"] = image
         # Second level
-        for l2_champ_name, l2_champ_data in champ_data["next"].items():
+        for l2_match_value, l2_data in data["next"].items():
             l2_node_data = {
                 "text": {
-                    "name": l2_champ_name,
-                    "title": f"Played {l2_champ_data['count']} time(s)",
+                    "name": l2_match_value,
+                    "title": f"Played {l2_data['count']} time(s)",
                 },
-                "image": f"http://ddragon.leagueoflegends.com/cdn/{settings.latest_release}/img/champion/{l2_champ_name}.png",
-                "HTMLclass": "node-champion",
+                "HTMLclass": "node-custom",
                 "children": [],
             }
+            image = riot.get_image_url(key=match_key, value=l2_match_value)
+            if image is not None:
+                l2_node_data["image"] = image
             # Third level
-            for l3_champ_name, l3_champ_data in l2_champ_data["next"].items():
+            for l3_match_value, l3_data in l2_data["next"].items():
                 l3_node_data = {
                     "text": {
-                        "name": l3_champ_name,
-                        "title": f"Played {l3_champ_data['count']} time(s)",
+                        "name": l3_match_value,
+                        "title": f"Played {l3_data['count']} time(s)",
                     },
-                    "image": f"http://ddragon.leagueoflegends.com/cdn/{settings.latest_release}/img/champion/{l3_champ_name}.png",
-                    "HTMLclass": "node-champion",
+                    "HTMLclass": "node-custom",
                     "children": [],
                 }
+                image = riot.get_image_url(key=match_key, value=l3_match_value)
+                if image is not None:
+                    l3_node_data["image"] = image
                 l2_node_data["children"].append(l3_node_data)
 
             node_data["children"].append(l2_node_data)

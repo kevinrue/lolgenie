@@ -9,7 +9,7 @@
     border-radius: 3px;
     /* background-color: #ffffff; */
     border: 1px solid #000;
-    width: 220px;
+    width: 190px;
     font-size: 13px;
     overflow: auto;
 }
@@ -20,11 +20,11 @@
 .node > p {
     margin: 0;
 }
-.node-champion {
+.node-custom {
     /*color:black;*/
     /*background-color: #ffeeee;*/
 }
-.node-champion > img {
+.node-custom > img {
     width: 42px;
     margin-right: 5px;
 }

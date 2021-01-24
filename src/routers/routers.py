@@ -99,18 +99,29 @@ def summoner_get(
     # History tree - By champion
     # TODO: Only get the data for a specific queue no point having the aram champions etc...
     try:
-        history_tree_champ_data = data_utils.get_history_tree_champ_data(
-            last_matches["matches"]
+        history_tree_champ_data = data_utils.get_history_tree_data(
+            last_matches["matches"], "champion_name"
         )
         extra_context["history_tree_champ_data"] = history_tree_champ_data
-        extra_context["success"]["champ_history_tree"] = True
+        extra_context["success"]["history_tree_champ"] = True
     except:
         context["messages"].append(
             ("error", f"Something went wrong while getting champion tree data")
         )
-        extra_context["success"]["champ_history_tree"] = False
+        extra_context["success"]["history_tree_champ"] = False
 
-    # TODO: History tree - By lane
+    # History tree - By lane
+    try:
+        history_tree_lane_data = data_utils.get_history_tree_data(
+            last_matches["matches"], "lane"
+        )
+        extra_context["history_tree_lane_data"] = history_tree_lane_data
+        extra_context["success"]["history_tree_lane"] = True
+    except:
+        context["messages"].append(
+            ("error", f"Something went wrong while getting lane tree data")
+        )
+        extra_context["success"]["history_tree_lane"] = False
 
     # Update context
     context.update(extra_context)
