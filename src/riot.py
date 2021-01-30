@@ -140,15 +140,15 @@ def get_last_matches_enriched(
     success_last_matches, last_matches = get_last_matches(
         api_host,
         encrypted_account_id,
-        start_index=0,
-        end_index=20,
+        start_index=start_index,
+        end_index=end_index,
     )
     if not success_last_matches:
         raise Exception(f"Failed to retrieve match history data: {last_matches}")
 
     # 2. Add champion data in each match
     # Fetch champion data
-    champions = get_champions(release=settings.latest_release)
+    champions = get_champions(release=release)
     champ_ids_to_names = get_champions_map(champions, key="key", value="id")
     # Add champion data to each match, if the match history was succesfully queried
     for match in last_matches["matches"]:
